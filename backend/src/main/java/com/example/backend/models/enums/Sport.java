@@ -1,6 +1,6 @@
 package com.example.backend.models.enums;
 
-public enum Sports {
+public enum Sport {
     Basketball,
     Baseball,
     Soccer,

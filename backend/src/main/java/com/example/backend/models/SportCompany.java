@@ -6,17 +6,34 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category extends BaseNameDescription {
+public class SportCompany extends BaseNameDescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @OneToMany(mappedBy = "category", orphanRemoval = true)
+    Date creationDate;
+
+    String email;
+
+    String contactNumber;
+
+    String address;
+
+    String city;
+
+    @OneToOne
+    User companyOwner;
+
+    @OneToMany(mappedBy = "sportCompany", orphanRemoval = true)
     Set<SportItem> sportItems;
+
+    @Lob
+    byte[] picture;
 }

@@ -5,24 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SportItems {
+public class ShoppingCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String name;
-
-    String description;
-
-    Integer price;
+    @ManyToMany
+    Set<SportItem> items;
 
     @OneToOne
-    Category category;
-
-    Boolean isSeller;
+    User cartOwner;
 }

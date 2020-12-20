@@ -1,9 +1,9 @@
 package com.example.backend.repository;
 
-import com.example.backend.models.SportItems;
+import com.example.backend.models.SportItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SportItemsRepository extends JpaRepository<SportItems, Long> {
+public interface SportItemRepository extends JpaRepository<SportItem, Long> {
 }

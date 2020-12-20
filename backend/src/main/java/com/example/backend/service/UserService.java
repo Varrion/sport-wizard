@@ -1,19 +1,11 @@
 package com.example.backend.service;
 
 import com.example.backend.models.User;
+import com.example.backend.models.dto.UserDto;
+import com.example.backend.service.base.BaseGetDeleteService;
+import com.example.backend.service.base.BaseSaveUpdateService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface UserService {
-
-    public List<User>AllUsers();
-
-    public Optional<User> getOneUser(String username);
-
-    public User saveUser(User user);
-
-    public User editUser(User user, String username);
-
-    public void deleteUser(String username);
+public interface UserService extends UserDetailsService, BaseGetDeleteService<User, String>, BaseSaveUpdateService<User, UserDto, MultipartFile, String> {
 }
