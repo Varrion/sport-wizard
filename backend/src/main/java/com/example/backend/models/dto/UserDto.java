@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class UserDto {
-    String username;
+    String email;
 
     String password;
 
@@ -15,8 +15,6 @@ public class UserDto {
     Boolean gender;
 
     Integer age;
-
-    String email;
 
     String phoneNumber;
 

@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
@@ -18,7 +15,7 @@ import java.util.Collection;
 @AllArgsConstructor
 public class User implements UserDetails {
     @Id
-    String username;
+    String email;
 
     String password;
 
@@ -29,8 +26,6 @@ public class User implements UserDetails {
     Boolean gender;
 
     Integer age;
-
-    String email;
 
     String phoneNumber;
 
@@ -54,6 +49,11 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     @Override

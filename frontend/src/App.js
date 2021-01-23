@@ -1,25 +1,53 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useEffect, useState} from "react";
+import Header from "./shared/Header";
+import Switch from "react-bootstrap/Switch";
+import axios from "axios";
+import {AuthContext} from "./shared/AuthContext";
+import {Route} from "react-router-dom";
+import SignIn from "./components/user/SignIn";
+import SignUp from "./components/user/SignUp";
+import Home from "./components/Home";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [loggedUser, setLoggedUser] = useState(null);
+
+    const logoutUser = () => {
+        setLoggedUser(null);
+    }
+
+    const userData = {
+        user: loggedUser,
+        logoutUser: logoutUser
+    }
+
+    useEffect(() => {
+        axios.get("users/login")
+            .then(() => setLoggedUser(loggedUser))
+    }, [],)
+
+    return (
+        <>
+            <AuthContext.Provider value={userData}>
+                <Header/>
+                <div className="outer">
+                    <div className="inner">
+                        <Switch>
+                            <Route path={"/"} exact>
+                                <Home/>
+                            </Route>
+                            <Route path={"/sign-in"} exact>
+                                <SignIn/>
+                            </Route>
+                            <Route path={"/sign-up"} exact>
+                                <SignUp/>
+                            </Route>
+                        </Switch>
+                    </div>
+                </div>
+            </AuthContext.Provider>
+        </>
+    );
 }
 
 export default App;

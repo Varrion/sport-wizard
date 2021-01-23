@@ -78,12 +78,11 @@ public class UserServiceImplementation implements UserService {
             user = getById(username);
         }
 
+        user.setEmail(userDto.getEmail());
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
-        user.setUsername(userDto.getUsername());
         user.setGender(userDto.getGender());
         user.setAge(userDto.getAge());
-        user.setEmail(userDto.getEmail());
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setAddress(userDto.getAddress());
         user.setCity(userDto.getCity());
