@@ -1,6 +1,7 @@
 package com.example.backend.models;
 
 import com.example.backend.models.base.BaseNameDescription;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,8 @@ import java.util.Set;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Category extends BaseNameDescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,4 +20,8 @@ public class Category extends BaseNameDescription {
 
     @OneToMany(mappedBy = "category", orphanRemoval = true)
     Set<SportItem> sportItems;
+
+    public Category(String name, String description) {
+        super(name, description);
+    }
 }

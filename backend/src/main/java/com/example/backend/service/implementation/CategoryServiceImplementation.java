@@ -1,5 +1,6 @@
 package com.example.backend.service.implementation;
 
+import com.example.backend.models.dto.CategoryDto;
 import com.example.backend.models.Category;
 import com.example.backend.repository.CategoryRepository;
 import com.example.backend.service.CategoryService;
@@ -18,13 +19,18 @@ public class CategoryServiceImplementation implements CategoryService {
     }
 
     @Override
-    public Category saveCategory(Category category) {
+    public Category saveCategory(CategoryDto categoryDto) {
+        Category category = new Category(categoryDto.getName(), categoryDto.getDescription());
         return categoryRepository.save(category);
     }
 
     @Override
-    public Category editCategory(Category category, Long id) {
-        return null;
+    public Category editCategory(CategoryDto categoryDto, Long id) {
+        Category category = getById(id);
+        category.setName(categoryDto.getName());
+        category.setDescription(categoryDto.getDescription());
+
+        return categoryRepository.save(category);
     }
 
     @Override

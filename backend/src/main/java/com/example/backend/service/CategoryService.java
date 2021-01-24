@@ -1,11 +1,12 @@
 package com.example.backend.service;
 
+import com.example.backend.models.dto.CategoryDto;
 import com.example.backend.models.Category;
 import com.example.backend.service.base.BaseGetDeleteService;
 
 public interface CategoryService extends BaseGetDeleteService<Category, Long> {
 
-    Category saveCategory(Category category);
+    Category saveCategory(CategoryDto categoryDto);
 
-    Category editCategory(Category category, Long id);
+    Category editCategory(CategoryDto categoryDto, Long id);
 }

@@ -2,6 +2,7 @@ package com.example.backend.service.implementation;
 
 import com.example.backend.models.User;
 import com.example.backend.models.dto.UserDto;
+import com.example.backend.models.dto.UserLoginDto;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public User getById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("Invalid email address."));
     }
 
     @Override
@@ -69,16 +70,15 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        return null;
+        return getById(s);
     }
 
-    private User DtoToUser(UserDto userDto, @Nullable String username) {
+    private User DtoToUser(UserDto userDto, @Nullable String email) {
         User user = new User();
-        if (username != null) {
-            user = getById(username);
+        if (email != null) {
+            user = getById(email);
         }
 
-        user.setEmail(userDto.getEmail());
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
         user.setGender(userDto.getGender());
@@ -88,5 +88,16 @@ public class UserServiceImplementation implements UserService {
         user.setCity(userDto.getCity());
 
         return user;
+    }
+
+    @Override
+    public User signInUser(UserLoginDto loginDto) {
+        User user = (User) loadUserByUsername(loginDto.getEmail());
+
+        if (user.getPassword().equals(loginDto.getPassword())) {
+            return user;
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

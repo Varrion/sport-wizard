@@ -3,17 +3,21 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Button from "react-bootstrap/Button";
 import Nav from "react-bootstrap/Nav";
-import axios from "axios";
 import {AuthContext} from "./AuthContext";
 import {Link} from "react-router-dom";
+import {GetAllCategories} from "../services/CategoryService";
+import AddUpdateCategory from "../components/item/category/AddUpdateCategory";
 
 const Header = () => {
-    const [companies, setCompanies] = useState(null);
+    const [categories, setCategories] = useState(null);
+    const [addCategoryModal, setAddCategoryModal] = useState(false);
 
     useEffect(() => {
-        axios.get("companies")
-            .then(res => setCompanies(res.data))
-    }, [])
+        GetAllCategories()
+            .then(res => setCategories(res.data));
+
+        console.log(addCategoryModal);
+    }, [addCategoryModal])
 
     return (
         <AuthContext.Consumer>
@@ -23,11 +27,17 @@ const Header = () => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="mr-auto">
-                            <NavDropdown title="Companies" id="collasible-nav-dropdown">
-                                {companies && companies.length > 0 && companies.map(company =>
-                                    <Link key={company.id} className={"dropdown-item"}
-                                          to={`/company/${company.id}`}>{company.name}</Link>
-                                )}
+                            <NavDropdown title="Category" id="collasible-nav-dropdown">
+                                {categories ? <>
+                                        {categories.length > 0 && categories.map(company =>
+                                            <Link key={company.id} className={"dropdown-item"}
+                                                  to={`/company/${company.id}`}>{company.name}
+                                            </Link>)}
+                                            <NavDropdown.Divider/>
+                                        <Button variant={"link"} onClick={() => setAddCategoryModal(true)}>Add</Button>
+                                    </> :
+                                    <Button variant={"link"} onClick={() => setAddCategoryModal(true)}>Add</Button>
+                                }
                             </NavDropdown>
                         </Nav>
                         <Nav>
@@ -45,12 +55,12 @@ const Header = () => {
                                     <Button variant={"link"} onClick={userData.logoutUser} className={"nav-link"}>
                                         <i className="fas fa-sign-out-alt"/></Button>
                                 </>}
-
                         </Nav>
                     </Navbar.Collapse>
+                    {addCategoryModal && <AddUpdateCategory show={addCategoryModal} onHide={() => setAddCategoryModal(false)}/>}
                 </Navbar>}
         </AuthContext.Consumer>
     )
 }
 
-export default Header
+export default Header;

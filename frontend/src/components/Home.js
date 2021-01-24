@@ -3,10 +3,12 @@ import CarouselComponent from "../shared/CarouselComponent";
 import {GetAllCompanies} from "../services/CompanyService";
 import {Link} from "react-router-dom";
 import {GetAllItems} from "../services/ItemService";
+import AddUpdateCategory from "./item/category/AddUpdateCategory";
 
 const Home = () => {
     const [companies, setCompanies] = useState(null);
     const [latestItems, setLatestItems] = useState(null);
+    const [addCategoryModal, setAddCategoryModal] = useState(null);
 
     useEffect(() => {
         GetAllCompanies()
@@ -43,8 +45,8 @@ const Home = () => {
                             </p>)}
                     </> : <h4>No items inserted yet</h4>}
                 </div>
-
             </div>
+            <AddUpdateCategory show={addCategoryModal} onHide={() => setAddCategoryModal(false)}/>
         </div>
     )
 }
