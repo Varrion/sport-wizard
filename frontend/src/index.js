@@ -7,8 +7,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter} from "react-router-dom";
 import axios from "axios";
 
+const authenticationToken = sessionStorage.getItem("AuthenticationToken");
+
 axios.defaults.baseURL = 'http://localhost:8080/api';
-axios.defaults.headers.common['Authorization'] = 'AuthenticationToken';
+axios.defaults.headers.common['Authorization'] = authenticationToken;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 ReactDOM.render(

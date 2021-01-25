@@ -48,4 +48,14 @@ public class SportItemServiceImplementation implements SportItemService {
     public SportItem update(SportItemDto entityDto, MultipartFile entityPicture, Long entityId) {
         return null;
     }
+
+    @Override
+    public List<SportItem> getItemsByCategory(Long categoryId) {
+        return itemRepository.getAllByCategoryId(categoryId);
+    }
+
+    @Override
+    public List<SportItem> getItemsByCompany(Long companyId) {
+        return itemRepository.getAllBySportCompanyId(companyId);
+    }
 }

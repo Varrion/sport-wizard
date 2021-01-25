@@ -25,7 +25,7 @@ const DeleteUser = (userId) => {
 }
 
 const AuthenticationToken = (email, password) => {
-    return 'Basic ' + window.btoa(`${email} : ${password}`);
+    return 'Basic ' + window.btoa(email + ":" + password);
 }
 
 export {GetAllUsers, GetUserDetails, SignUpUser, SignInUser, EditUser, DeleteUser, AuthenticationToken}

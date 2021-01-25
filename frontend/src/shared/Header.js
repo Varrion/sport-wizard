@@ -15,8 +15,6 @@ const Header = () => {
     useEffect(() => {
         GetAllCategories()
             .then(res => setCategories(res.data));
-
-        console.log(addCategoryModal);
     }, [addCategoryModal])
 
     return (
@@ -28,17 +26,20 @@ const Header = () => {
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="mr-auto">
                             <NavDropdown title="Category" id="collasible-nav-dropdown">
-                                {categories ? <>
-                                        {categories.length > 0 && categories.map(company =>
-                                            <Link key={company.id} className={"dropdown-item"}
-                                                  to={`/company/${company.id}`}>{company.name}
+                                {categories && categories.length > 0 ? <>
+                                        {categories.map(category =>
+                                            <Link key={category.id} className={"dropdown-item"}
+                                                  to={`/category/${category.id}`}>{category.name}
                                             </Link>)}
-                                            <NavDropdown.Divider/>
-                                        <Button variant={"link"} onClick={() => setAddCategoryModal(true)}>Add</Button>
+                                        <NavDropdown.Divider/>
+                                        <Button variant={"link"} onClick={() => setAddCategoryModal(true)}>Add
+                                            Category</Button>
                                     </> :
-                                    <Button variant={"link"} onClick={() => setAddCategoryModal(true)}>Add</Button>
+                                    <Button variant={"link"} onClick={() => setAddCategoryModal(true)}>Add
+                                        Category</Button>
                                 }
                             </NavDropdown>
+                            <Link className={"nav-link"} to={"/items"}>Items</Link>
                         </Nav>
                         <Nav>
                             {!userData.user
@@ -50,14 +51,15 @@ const Header = () => {
                                     <Link className={"nav-link"}
                                           to={`/user/${userData.user.username}`}>
                                         <i className="fas fa-user-circle"/>
-                                        <span> {userData.user.firstName}</span>
+                                        <span> {userData.user.name}</span>
                                     </Link>
                                     <Button variant={"link"} onClick={userData.logoutUser} className={"nav-link"}>
-                                        <i className="fas fa-sign-out-alt"/></Button>
+                                        <i className="fas fa-sign-out-alt"/>Sign Out</Button>
                                 </>}
                         </Nav>
                     </Navbar.Collapse>
-                    {addCategoryModal && <AddUpdateCategory show={addCategoryModal} onHide={() => setAddCategoryModal(false)}/>}
+                    {addCategoryModal &&
+                    <AddUpdateCategory show={addCategoryModal} onHide={() => setAddCategoryModal(false)}/>}
                 </Navbar>}
         </AuthContext.Consumer>
     )

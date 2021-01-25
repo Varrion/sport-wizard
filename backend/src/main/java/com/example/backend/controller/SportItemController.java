@@ -26,8 +26,18 @@ public class SportItemController {
     }
 
     @GetMapping("/{id}")
-    public SportItem getItem(@PathVariable Long id) {
+    SportItem getItem(@PathVariable Long id) {
         return itemService.getById(id);
+    }
+
+    @GetMapping("category/{categoryId}")
+    List<SportItem> getItemsByCategory(@PathVariable Long categoryId) {
+        return itemService.getItemsByCategory(categoryId);
+    }
+
+    @GetMapping("company/{companyId}")
+    List<SportItem> getItemsByCompany(@PathVariable Long companyId) {
+        return itemService.getItemsByCategory(companyId);
     }
 
     @PostMapping

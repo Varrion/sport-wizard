@@ -1,12 +1,13 @@
 package com.example.backend.models.enums;
 
 public enum Sport {
+    None,
+    Multiple,
     Basketball,
-    Baseball,
-    Soccer,
     Football,
+    Skiing,
     Swimming,
-    Volleyball,
     Handball,
-    Tennis
+    Tennis,
+    Other
 }

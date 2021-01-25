@@ -27,10 +27,10 @@ const Home = () => {
             <CarouselComponent/>
             <div className={"row mt-4"}>
                 <div className={"col-md-7"}>
-                    {companies ? <>
+                    {companies && companies.length > 0 ? <>
                         <h4>Our brands</h4>
                         <ul>
-                            {companies.length > 0 && companies.map(company =>
+                            {companies.map(company =>
                                 <li key={company.id}>
                                     <Link to={`/brand/${company.id}`}> {company.name} </Link>
                                 </li>)}
@@ -38,12 +38,10 @@ const Home = () => {
                     </> : <h4>No Brands yet</h4>}
                 </div>
                 <div className={"col-md-5"}>
-                    {latestItems ? <>
-                        {latestItems.length > 0 ?? latestItems.map(item =>
-                            <p key={item.id}>
-                                {item.name}
-                            </p>)}
-                    </> : <h4>No items inserted yet</h4>}
+                    {latestItems && latestItems.length > 0 ? latestItems.map(item =>
+                        <p key={item.id}>
+                            {item.name}
+                        </p>) : <h4>No items inserted yet</h4>}
                 </div>
             </div>
             <AddUpdateCategory show={addCategoryModal} onHide={() => setAddCategoryModal(false)}/>

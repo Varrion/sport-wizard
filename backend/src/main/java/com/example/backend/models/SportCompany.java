@@ -3,6 +3,7 @@ package com.example.backend.models;
 import com.example.backend.models.base.BaseNameDescription;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class SportCompany extends BaseNameDescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

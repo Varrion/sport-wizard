@@ -79,6 +79,8 @@ public class UserServiceImplementation implements UserService {
             user = getById(email);
         }
 
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
         user.setGender(userDto.getGender());
@@ -93,11 +95,9 @@ public class UserServiceImplementation implements UserService {
     @Override
     public User signInUser(UserLoginDto loginDto) {
         User user = (User) loadUserByUsername(loginDto.getEmail());
-
         if (user.getPassword().equals(loginDto.getPassword())) {
             return user;
         }
-
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

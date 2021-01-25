@@ -1,9 +1,9 @@
 package com.example.backend.models;
 
 import com.example.backend.models.base.BaseNameDescription;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,6 +13,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Category extends BaseNameDescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +25,6 @@ public class Category extends BaseNameDescription {
     public Category(String name, String description) {
         super(name, description);
     }
+
+
 }
