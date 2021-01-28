@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class UserDto {
-
     @NotNull
     String email;
 
@@ -18,9 +17,6 @@ public class UserDto {
 
     @NotNull
     String surname;
-
-    @Nullable
-    Boolean gender;
 
     @Nullable
     Integer age;
@@ -36,7 +32,4 @@ public class UserDto {
 
     @Nullable
     Boolean isCompanyOwner;
-
-    @Nullable
-    Boolean hasCreatedCompany;
 }

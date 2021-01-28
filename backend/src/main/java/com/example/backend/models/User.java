@@ -1,8 +1,10 @@
 package com.example.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,6 +15,7 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class User implements UserDetails {
     @Id
     String email;
@@ -37,10 +40,12 @@ public class User implements UserDetails {
 
     Boolean hasCreatedCompany;
 
-    @OneToOne(mappedBy = "cartOwner")
+    @OneToOne(mappedBy = "cartOwner", orphanRemoval = true)
+    @JsonIgnore
     ShoppingCart shoppingCart;
 
-    @OneToOne(mappedBy = "companyOwner")
+    @OneToOne(mappedBy = "companyOwner", orphanRemoval = true)
+    @JsonIgnore
     SportCompany sportCompany;
 
     @Lob

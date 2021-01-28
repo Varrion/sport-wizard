@@ -3,10 +3,8 @@ package com.example.backend.models;
 import com.example.backend.models.base.BaseNameDescription;
 import com.example.backend.models.enums.ItemGender;
 import com.example.backend.models.enums.Sport;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -16,6 +14,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString
 public class SportItem extends BaseNameDescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +35,7 @@ public class SportItem extends BaseNameDescription {
     SportCompany sportCompany;
 
     @ManyToMany
+    @JsonIgnore
     Set<ShoppingCart> shoppingCarts;
 
     @Lob

@@ -17,7 +17,6 @@ const SignUp = () => {
         address: null,
         city: null,
         isCompanyOwner: false,
-        hasCreatedCompany: false,
     });
 
     const handleChange = name => event => {

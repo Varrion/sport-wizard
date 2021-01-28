@@ -5,6 +5,7 @@ import AddUpdateCategory from "./AddUpdateCategory";
 import Button from "react-bootstrap/Button";
 import {AuthContext} from "../../../shared/AuthContext";
 import {GetItemsByCategory} from "../../../services/ItemService";
+import ItemMedia from "../../../shared/ItemMedia";
 
 const CategoryDetails = props => {
 
@@ -29,7 +30,7 @@ const CategoryDetails = props => {
                 <AuthContext.Consumer>
                     {userData =>
                         <div>
-                            <h2>{category.name}
+                            <h1>{category.name}
                                 {userData.user && userData.user.isCompanyOwner && <><Button
                                     className={"float-right ml-2"} variant={"danger"}
                                     onClick={() => DeleteCategory(categoryId).then(() => {
@@ -40,13 +41,19 @@ const CategoryDetails = props => {
                                     <Button className={"float-right"} variant={"info"}
                                             onClick={() => setShowEditModal(true)}>Edit</Button>
                                 </>}
-                            </h2>
+                            </h1>
                             <p>{category.description}</p>
                             <div>
                                 {categoryItems && categoryItems.length > 0 ? <>
-                                    <h5>Category Items</h5>
-                                    {categoryItems.map(item => <p key={item.id}>item.name</p>)}
-                                </> : <h5>No Items in this category yet</h5>}
+                                    <h3>Category Items</h3>
+                                    <hr className={"custom-style2 mb-2"}/>
+                                    <div className={"row"}>
+                                        {categoryItems.map(item =>
+                                            <div key={item.id}  className={"col-md-6"}>
+                                                <ItemMedia item={item}/>
+                                            </div>)}
+                                    </div>
+                                </> : <h3>No Items in this category yet</h3>}
                             </div>
                         </div>
                     }

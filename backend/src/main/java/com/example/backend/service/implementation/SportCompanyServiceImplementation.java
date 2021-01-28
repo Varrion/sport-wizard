@@ -48,21 +48,22 @@ public class SportCompanyServiceImplementation implements SportCompanyService {
 
     @Override
     public SportCompany save(SportCompanyDto entityDto, MultipartFile entityPicture) throws IOException {
-        SportCompany sportCompany = DtoToCompany(entityDto, null);
-
         User companyOwner = userService.getById(entityDto.getCompanyOwnerUsername());
         if (companyOwner.getIsCompanyOwner() && !companyOwner.getHasCreatedCompany()) {
-            sportCompany.setCompanyOwner(companyOwner);
+            SportCompany sportCompany = DtoToCompany(entityDto, null);
 
+            sportCompany.setCompanyOwner(companyOwner);
             companyOwner.setHasCreatedCompany(true);
             userService.saveEntity(companyOwner);
-        }
 
-        if (entityPicture != null) {
-            sportCompany.setPicture(entityPicture.getBytes());
-        }
+            if (entityPicture != null) {
+                sportCompany.setPicture(entityPicture.getBytes());
+            }
 
-        return companyRepository.save(sportCompany);
+            return companyRepository.save(sportCompany);
+        }
+        
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
 
     @Override
@@ -79,6 +80,11 @@ public class SportCompanyServiceImplementation implements SportCompanyService {
         }
 
         return saveEntity(sportCompany);
+    }
+
+    @Override
+    public SportCompany findByCompanyOwner(String email) {
+        return companyRepository.findSportCompanyByCompanyOwnerEmail(email);
     }
 
     private SportCompany DtoToCompany(SportCompanyDto companyDto, @Nullable Long companyId) {

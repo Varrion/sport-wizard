@@ -25,7 +25,9 @@ const SignIn = () => {
                 alert(`Welcome ${res.data.name}`);
                 window.location.reload();
             })
-            .catch(err => alert("incorrect credentials"))
+            .catch(err => {
+                alert("incorrect credentials");
+            })
     }
 
     return (

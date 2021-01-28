@@ -2,7 +2,7 @@ import './App.css';
 import React, {useEffect, useState} from "react";
 import Header from "./shared/Header";
 import {AuthContext} from "./shared/AuthContext";
-import {Route, Switch} from "react-router-dom";
+import {Route, Switch, useHistory} from "react-router-dom";
 import SignIn from "./components/user/SignIn";
 import SignUp from "./components/user/SignUp";
 import Home from "./components/Home";
@@ -10,19 +10,28 @@ import {SignInUser} from "./services/UserService";
 import CategoryDetails from "./components/item/category/CategoryDetails";
 import NoMatch from "./components/NoMatch";
 import ItemList from "./components/item/ItemList";
+import {GetMyCompany} from "./services/CompanyService";
+import CompanyDetails from "./components/company/CompanyDetails";
+import ItemDetails from "./components/item/ItemDetails";
+import UserDetails from "./components/user/UserDetails";
 
 function App() {
+    const history = useHistory();
     const [loggedUser, setLoggedUser] = useState(null);
+    const [updateUser, setUpdateUser] = useState(false);
+    const [userCompany, setUserCompany] = useState(null);
 
     const logoutUser = () => {
         setLoggedUser(null);
         sessionStorage.removeItem("AuthenticationToken");
-        alert("You have been logged out")
+        alert("You have been logged out");
+        history.push("/")
         window.location.reload();
     }
 
     const userData = {
         user: loggedUser,
+        company: userCompany,
         logoutUser: logoutUser
     }
 
@@ -36,38 +45,53 @@ function App() {
             }
             SignInUser(userDto)
                 .then(res => {
-                    setLoggedUser(res.data);
+                    let user = res.data;
+                    setLoggedUser(user);
+
+                    if (user.isCompanyOwner && user.hasCreatedCompany) {
+                        GetMyCompany(user.email)
+                            .then(r => setUserCompany(r.data))
+                    }
                 })
         }
-    }, [])
+    }, [updateUser])
 
     return (
         <>
             <AuthContext.Provider value={userData}>
                 <Header/>
-                <div className="outer">
-                    <div className="inner">
-                        <Switch>
-                            <Route exact path={"/"}>
-                                <Home/>
-                            </Route>
-                            <Route exact path={"/sign-in"}>
-                                <SignIn/>
-                            </Route>
-                            <Route exact path={"/sign-up"}>
-                                <SignUp/>
-                            </Route>
-                            <Route exact path={"/category/:categoryId"}>
-                                <CategoryDetails/>
-                            </Route>
-                            <Route exact path={"/items"}>
-                                <ItemList/>
-                            </Route>
-                            <Route path={"*"}>
-                                <NoMatch/>
-                            </Route>
-                        </Switch>
-                    </div>
+                <div className="section-wrapper">
+                    <Switch>
+                        <Route exact path={"/"}>
+                            <Home/>
+                        </Route>
+                        <Route exact path={"/sign-in"}>
+                            <SignIn/>
+                        </Route>
+                        <Route exact path={"/sign-up"}>
+                            <SignUp/>
+                        </Route>
+                        <Route exact path={"/category/:categoryId"}>
+                            <CategoryDetails/>
+                        </Route>
+                        <Route exact path={"/items"}>
+                            <ItemList/>
+                        </Route>
+                        <Route exact path={"/brand/:companyId"}>
+                            <CompanyDetails/>
+                        </Route>
+                        <Route exact path={"/item/:itemId"}>
+                            <ItemDetails/>
+                        </Route>
+                        <Route exact path={"/my-profile"}>
+                            <UserDetails user={loggedUser} updateprofile={updateUser}
+                                         removeUser={logoutUser}
+                                         setupdateprofile={setUpdateUser} ownedbrand={userCompany}/>
+                        </Route>
+                        <Route path={"*"}>
+                            <NoMatch/>
+                        </Route>
+                    </Switch>
                 </div>
             </AuthContext.Provider>
         </>

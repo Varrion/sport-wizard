@@ -4,10 +4,13 @@ import {AuthContext} from "../../shared/AuthContext";
 import {Table} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import AddUpdateItem from "./AddUpdateItem";
+import DefaultSportPicture from "../../shared/images/defaultSport.jpg"
+import {useHistory} from "react-router-dom";
 
 const ItemList = () => {
     const [items, setItems] = useState(null);
     const [showAddItemModal, setShowAddItemModal] = useState(false);
+    const history = useHistory();
 
     useEffect(() => {
         GetAllItems()
@@ -39,18 +42,21 @@ const ItemList = () => {
                         </thead>
                         <tbody>
                         {items.length > 0 && items.map(item =>
-                            <tr key={item.id}>
-                                <td>{item.id}</td>
-                                <td>{item.name}</td>
-                                <td>{item.description}</td>
-                                <td>{item.price}</td>
-                                <td>{item.category.name}</td>
-                                <td>{item.itemGender}</td>
+                            <tr key={item.id} className={"item-row"} onClick={() => history.push(`/item/${item.id}`)}>
+                                <td><img
+                                    src={item.picture ? "data:image/jpeg;base64," + item.picture : DefaultSportPicture}
+                                    width={120} height={90}/></td>
+                                <td className={"item-data"}>{item.name}</td>
+                                <td className={"item-data"}>{item.description}</td>
+                                <td className={"item-data"}>{item.price}</td>
+                                <td className={"item-data"}>{item.category.name}</td>
+                                <td className={"item-data"}>{item.itemGender}</td>
                             </tr>)}
                         </tbody>
                     </Table>
                 </div>}
-                {showAddItemModal && <AddUpdateItem show={showAddItemModal} onHide={() => setShowAddItemModal(false)}/>}
+                {showAddItemModal && <AddUpdateItem companyid={userData.company?.id} show={showAddItemModal}
+                                                    onHide={() => setShowAddItemModal(false)}/>}
             </>}
         </AuthContext.Consumer>
     )

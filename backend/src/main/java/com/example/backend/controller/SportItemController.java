@@ -37,7 +37,7 @@ public class SportItemController {
 
     @GetMapping("company/{companyId}")
     List<SportItem> getItemsByCompany(@PathVariable Long companyId) {
-        return itemService.getItemsByCategory(companyId);
+        return itemService.getItemsByCompany(companyId);
     }
 
     @PostMapping

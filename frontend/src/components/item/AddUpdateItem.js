@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import {useHistory} from "react-router-dom";
 import {AddItem, EditItem, ItemGender, Sport} from "../../services/ItemService";
 import {GetAllCategories} from "../../services/CategoryService";
+import Dropzone from "react-dropzone";
 
 const AddUpdateItem = (props) => {
     let history = useHistory();
@@ -14,10 +15,10 @@ const AddUpdateItem = (props) => {
         price: props.item?.price ?? "",
         sport: props.item?.sport ?? "",
         itemGender: props.item?.itemGender ?? "",
-        categoryId: props.item?.categoryId ?? "",
-        companyId: props.item?.companyId ?? "",
+        categoryId: props.item?.category?.id ?? undefined,
+        companyId: props.item?.sportCompany?.id ?? null,
     });
-
+    const [itemPicture, setItemPicture] = useState(props.item?.picture ?? null);
     const [categories, setCategories] = useState(null);
 
     useEffect(() => {
@@ -32,14 +33,19 @@ const AddUpdateItem = (props) => {
     const handleSubmit = event => {
         event.preventDefault();
 
+        const itemData = new FormData();
+        itemData.append("itemDto", new Blob([JSON.stringify({...item})], {
+            type: "application/json"
+        }));
+        itemData.append("itemPicture", itemPicture);
         if (props.item) {
-            EditItem(props.item.id, item)
+            EditItem(props.item.id, itemData)
                 .then(() => props.onHide())
         } else {
-            AddItem(item)
+            AddItem(itemData)
                 .then(res => {
                     props.onHide();
-                    history.push(`/category/${res.data.id}`)
+                    history.push(`/item/${res.data.id}`)
                 })
         }
     }
@@ -64,21 +70,26 @@ const AddUpdateItem = (props) => {
                                       onChange={handleChange("description")}/>
                     </Form.Group>
 
+                    <Form.Group>
+                        <Form.Label>Price</Form.Label>
+                        <Form.Control placeholder="Enter price" value={item.price} type={"number"}
+                                      onChange={handleChange("price")}/>
+                    </Form.Group>
+
                     <fieldset>
                         <Form.Group as={Row}>
                             <Form.Label as="legend" column sm={2}>
                                 Item Type
                             </Form.Label>
                             <Col sm={10}>
-                                {ItemGender.map((itemFor, index) =>
+                                {ItemGender.map((itemFor) =>
                                     <Form.Check
+                                        key={itemFor}
                                         onChange={handleChange("itemGender")}
-                                        key={index}
-                                        value={itemFor}
                                         type="radio"
-                                        label={itemFor}
                                         name="formHorizontalRadios"
-                                        id={index}
+                                        label={itemFor}
+                                        value={itemFor}
                                     />)}
                             </Col>
                         </Form.Group>
@@ -96,7 +107,7 @@ const AddUpdateItem = (props) => {
                     <Form.Group>
                         <Form.Label>Category</Form.Label>
                         <Form.Control as="select" value={item.categoryId} onChange={handleChange("categoryId")}>
-                            <option value={0}>---</option>
+                            <option value={0}>Select one</option>
                             {categories && categories.length > 0 && categories.map(category =>
                                 <option key={category.id}
                                         value={category.id}>{category.name}
@@ -104,11 +115,26 @@ const AddUpdateItem = (props) => {
                             )}
                         </Form.Control>
                     </Form.Group>
+
+                    <Dropzone onDrop={acceptedFiles => setItemPicture(acceptedFiles[0])}>
+                        {({getRootProps, getInputProps}) => (
+                            <div className={"text-center dropdown-border"} {...getRootProps()}>
+                                <input {...getInputProps()} />
+                                {
+                                    itemPicture ?
+                                        <img
+                                            src={typeof itemPicture === "string" ? "data:image/jpeg;base64," + itemPicture : URL.createObjectURL(itemPicture)}
+                                            width={"100%"} height={350}/> :
+                                        <p>Drag 'n' drop picture here, or click to select files</p>
+                                }
+                            </div>
+                        )}
+                    </Dropzone>
                 </Modal.Body>
 
                 <Modal.Footer>
                     <Button variant="secondary" onClick={props.onHide}>Close</Button>
-                    <Button variant="primary" type={"submit"}>{props.category ? "Save Changes" : "Save"}</Button>
+                    <Button variant="primary" type={"submit"}>{props.item ? "Save Changes" : "Save"}</Button>
                 </Modal.Footer>
             </Form>
         </Modal>

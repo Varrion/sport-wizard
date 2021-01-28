@@ -1,8 +1,10 @@
 package com.example.backend.service.implementation;
 
+import com.example.backend.models.ShoppingCart;
 import com.example.backend.models.User;
 import com.example.backend.models.dto.UserDto;
 import com.example.backend.models.dto.UserLoginDto;
+import com.example.backend.repository.ShoppingCartRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -19,9 +21,11 @@ import java.util.List;
 @Service
 public class UserServiceImplementation implements UserService {
     private final UserRepository userRepository;
+    private final ShoppingCartRepository cartRepository;
 
-    public UserServiceImplementation(UserRepository userRepository) {
+    public UserServiceImplementation(UserRepository userRepository, ShoppingCartRepository cartRepository) {
         this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
     }
 
     @Override
@@ -43,13 +47,22 @@ public class UserServiceImplementation implements UserService {
     public User save(UserDto entityDto, MultipartFile entityPicture) throws IOException {
         User user = DtoToUser(entityDto, null);
 
+        user.setEmail(entityDto.getEmail());
         user.setIsCompanyOwner(entityDto.getIsCompanyOwner());
         user.setHasCreatedCompany(false);
         if (entityPicture != null) {
             user.setPicture(entityPicture.getBytes());
         }
 
-        return saveEntity(user);
+        saveEntity(user);
+
+        if (!user.getIsCompanyOwner()) {
+            ShoppingCart shoppingCart = new ShoppingCart();
+            shoppingCart.setCartOwner(user);
+            cartRepository.save(shoppingCart);
+        }
+
+        return user;
     }
 
     @Override
@@ -73,25 +86,6 @@ public class UserServiceImplementation implements UserService {
         return getById(s);
     }
 
-    private User DtoToUser(UserDto userDto, @Nullable String email) {
-        User user = new User();
-        if (email != null) {
-            user = getById(email);
-        }
-
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setName(userDto.getName());
-        user.setSurname(userDto.getSurname());
-        user.setGender(userDto.getGender());
-        user.setAge(userDto.getAge());
-        user.setPhoneNumber(userDto.getPhoneNumber());
-        user.setAddress(userDto.getAddress());
-        user.setCity(userDto.getCity());
-
-        return user;
-    }
-
     @Override
     public User signInUser(UserLoginDto loginDto) {
         User user = (User) loadUserByUsername(loginDto.getEmail());
@@ -99,5 +93,22 @@ public class UserServiceImplementation implements UserService {
             return user;
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
+    private User DtoToUser(UserDto userDto, @Nullable String email) {
+        User user = new User();
+        if (email != null) {
+            user = getById(email);
+        }
+
+        user.setPassword(userDto.getPassword());
+        user.setName(userDto.getName());
+        user.setSurname(userDto.getSurname());
+        user.setAge(userDto.getAge());
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setAddress(userDto.getAddress());
+        user.setCity(userDto.getCity());
+
+        return user;
     }
 }

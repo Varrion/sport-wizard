@@ -1,10 +1,8 @@
 package com.example.backend.models;
 
 import com.example.backend.models.base.BaseNameDescription;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@ToString
 public class SportCompany extends BaseNameDescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +33,7 @@ public class SportCompany extends BaseNameDescription {
     User companyOwner;
 
     @OneToMany(mappedBy = "sportCompany", orphanRemoval = true)
+    @JsonIgnore
     Set<SportItem> sportItems;
 
     @Lob

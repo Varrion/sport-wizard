@@ -7,15 +7,17 @@ import {AuthContext} from "./AuthContext";
 import {Link} from "react-router-dom";
 import {GetAllCategories} from "../services/CategoryService";
 import AddUpdateCategory from "../components/item/category/AddUpdateCategory";
+import AddUpdateCompany from "../components/company/AddUpdateCompany";
 
 const Header = () => {
     const [categories, setCategories] = useState(null);
     const [addCategoryModal, setAddCategoryModal] = useState(false);
+    const [addCompanyModal, setAddCompanyModal] = useState(false);
 
     useEffect(() => {
         GetAllCategories()
             .then(res => setCategories(res.data));
-    }, [addCategoryModal])
+    }, [addCategoryModal, addCompanyModal])
 
     return (
         <AuthContext.Consumer>
@@ -40,6 +42,12 @@ const Header = () => {
                                 }
                             </NavDropdown>
                             <Link className={"nav-link"} to={"/items"}>Items</Link>
+                            {userData.user ? (userData.user.isCompanyOwner && userData.user.hasCreatedCompany)
+                                ? <Link className={"nav-link"} to={`/brand/${userData.company?.id}`}>My Brand</Link>
+                                : (userData.user.isCompanyOwner && !userData.user.hasCreatedCompany) ?
+                                    <Button className={"nav-link"} variant={"link"}
+                                            onClick={() => setAddCompanyModal(true)}>Create
+                                        Brand </Button> : null : null}
                         </Nav>
                         <Nav>
                             {!userData.user
@@ -49,10 +57,16 @@ const Header = () => {
                                 </>
                                 : <>
                                     <Link className={"nav-link"}
-                                          to={`/user/${userData.user.username}`}>
+                                          to={`/my-profile`}>
                                         <i className="fas fa-user-circle"/>
-                                        <span> {userData.user.name}</span>
+                                        <span> My Profile </span>
                                     </Link>
+                                    {
+                                        !userData.user.isCompanyOwner &&
+                                        <Link className={"nav-link"} to={`/my-profile/cart`}>
+                                            <span> Shopping Cart</span>
+                                        </Link>
+                                    }
                                     <Button variant={"link"} onClick={userData.logoutUser} className={"nav-link"}>
                                         <i className="fas fa-sign-out-alt"/>Sign Out</Button>
                                 </>}
@@ -60,6 +74,9 @@ const Header = () => {
                     </Navbar.Collapse>
                     {addCategoryModal &&
                     <AddUpdateCategory show={addCategoryModal} onHide={() => setAddCategoryModal(false)}/>}
+                    {addCompanyModal &&
+                    <AddUpdateCompany creator={userData.user.email} show={addCompanyModal}
+                                      onHide={() => setAddCompanyModal(false)}/>}
                 </Navbar>}
         </AuthContext.Consumer>
     )

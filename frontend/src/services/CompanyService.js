@@ -8,6 +8,14 @@ const GetCompanyDetails = (companyId) => {
     return axios.get(`company/${companyId}`);
 }
 
+const GetMyCompany = (ownerEmail) => {
+    return axios.get("company/my-company", {
+        params: {
+            ownerEmail: ownerEmail
+        }
+    })
+}
+
 const AddCompany = (companyForm) => {
     return axios.post("company", companyForm);
 }
@@ -20,4 +28,4 @@ const DeleteCompany = (companyId) => {
     return axios.delete(`company/${companyId}`);
 }
 
-export {GetAllCompanies, GetCompanyDetails, AddCompany, EditCompany, DeleteCompany}
+export {GetAllCompanies, GetCompanyDetails, AddCompany, EditCompany, DeleteCompany, GetMyCompany}

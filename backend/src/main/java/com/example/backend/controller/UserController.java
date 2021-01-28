@@ -43,7 +43,7 @@ public class UserController {
 
     @PutMapping("/{email}")
     public User editUser(@PathVariable String email, @RequestPart("userDto") UserDto userDto,
-                         @RequestPart("accountPicture") Optional<MultipartFile> userPicture) throws IOException {
+                         @RequestPart("userPicture") Optional<MultipartFile> userPicture) throws IOException {
         return userService.update(userDto, userPicture.orElse(null), email);
     }
 

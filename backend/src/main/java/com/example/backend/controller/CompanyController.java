@@ -26,8 +26,13 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public SportCompany getCompany(@PathVariable Long id) {
+    SportCompany getCompanyDetails(@PathVariable Long id) {
         return companyService.getById(id);
+    }
+
+    @GetMapping("my-company")
+    SportCompany getMyCompanyDetails(@RequestParam("ownerEmail") String email) {
+        return companyService.findByCompanyOwner(email);
     }
 
     @PostMapping

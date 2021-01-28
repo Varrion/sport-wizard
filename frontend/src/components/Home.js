@@ -4,6 +4,7 @@ import {GetAllCompanies} from "../services/CompanyService";
 import {Link} from "react-router-dom";
 import {GetAllItems} from "../services/ItemService";
 import AddUpdateCategory from "./item/category/AddUpdateCategory";
+import ItemMedia from "../shared/ItemMedia";
 
 const Home = () => {
     const [companies, setCompanies] = useState(null);
@@ -29,19 +30,13 @@ const Home = () => {
                 <div className={"col-md-7"}>
                     {companies && companies.length > 0 ? <>
                         <h4>Our brands</h4>
-                        <ul>
-                            {companies.map(company =>
-                                <li key={company.id}>
-                                    <Link to={`/brand/${company.id}`}> {company.name} </Link>
-                                </li>)}
-                        </ul>
+                        {companies.map(company =>
+                            <Link style={{color: "gray"}} key={company.id} to={`/brand/${company.id}`}> {company.name} </Link>)}
                     </> : <h4>No Brands yet</h4>}
                 </div>
                 <div className={"col-md-5"}>
                     {latestItems && latestItems.length > 0 ? latestItems.map(item =>
-                        <p key={item.id}>
-                            {item.name}
-                        </p>) : <h4>No items inserted yet</h4>}
+                        <ItemMedia key={item.id} item={item}/>) : <h4>No items inserted yet</h4>}
                 </div>
             </div>
             <AddUpdateCategory show={addCategoryModal} onHide={() => setAddCategoryModal(false)}/>
