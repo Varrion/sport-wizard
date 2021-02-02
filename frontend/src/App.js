@@ -14,6 +14,7 @@ import {GetMyCompany} from "./services/CompanyService";
 import CompanyDetails from "./components/company/CompanyDetails";
 import ItemDetails from "./components/item/ItemDetails";
 import UserDetails from "./components/user/UserDetails";
+import ShoppingCart from "./components/user/ShoppingCart";
 
 function App() {
     const history = useHistory();
@@ -81,12 +82,15 @@ function App() {
                             <CompanyDetails/>
                         </Route>
                         <Route exact path={"/item/:itemId"}>
-                            <ItemDetails/>
+                            <ItemDetails itemsincart={loggedUser?.shoppingCart?.items}/>
                         </Route>
                         <Route exact path={"/my-profile"}>
                             <UserDetails user={loggedUser} updateprofile={updateUser}
                                          removeUser={logoutUser}
                                          setupdateprofile={setUpdateUser} ownedbrand={userCompany}/>
+                        </Route>
+                        <Route exact path={"/my-profile/cart"}>
+                            <ShoppingCart user={loggedUser} itemsincart={loggedUser?.shoppingCart?.items}/>
                         </Route>
                         <Route path={"*"}>
                             <NoMatch/>

@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @ToString
 public class SportItem extends BaseNameDescription {
     @Id
@@ -40,4 +40,18 @@ public class SportItem extends BaseNameDescription {
 
     @Lob
     byte[] picture;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SportItem)) return false;
+        if (!super.equals(o)) return false;
+        SportItem sportItem = (SportItem) o;
+        return getId().equals(sportItem.getId()) && Objects.equals(getPrice(), sportItem.getPrice()) && getSport() == sportItem.getSport() && getItemGender() == sportItem.getItemGender();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getId(), getPrice(), getSport(), getItemGender());
+    }
 }

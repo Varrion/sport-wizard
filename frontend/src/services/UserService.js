@@ -28,4 +28,6 @@ const AuthenticationToken = (email, password) => {
     return 'Basic ' + window.btoa(email + ":" + password);
 }
 
-export {GetAllUsers, GetUserDetails, SignUpUser, SignInUser, EditUser, DeleteUser, AuthenticationToken}
+const StripeKey = 'pk_test_51ICYOyKbGFXMWFFrTcyXCOfEYtXzGEblLOyqacKVfzgcjF93ZnGrLSGZuxVzGoiaNrnBSG4vWhdqjo5Df43ewzQb00jddotvuB';
+
+export {GetAllUsers, GetUserDetails, SignUpUser, SignInUser, EditUser, DeleteUser, AuthenticationToken, StripeKey}

@@ -1,10 +1,16 @@
 package com.example.backend.controller;
 
 import com.example.backend.models.SportItem;
+import com.example.backend.models.dto.CartDto;
+import com.example.backend.models.dto.ChargeDto;
 import com.example.backend.models.dto.SportItemDto;
 import com.example.backend.service.SportItemService;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,5 +61,22 @@ public class SportItemController {
     @DeleteMapping(value = "{id}")
     void deleteItem(@PathVariable Long id) {
         itemService.deleteById(id);
+    }
+
+    //Shopping Cart Section
+    @PostMapping("clear-cart")
+    void clearUserCart(@RequestBody String userEmail) {
+        itemService.ClearItemsFromShoppingCart(userEmail);
+    }
+
+    @PostMapping("update-cart")
+    void updateUserCart(@RequestBody CartDto cartDto) {
+        itemService.UpdateItemsInShoppingCart(cartDto);
+    }
+
+    @PostMapping("charge")
+    void chargeItems(@RequestBody ChargeDto chargeDto) throws StripeException {
+        Charge charge = itemService.Charge(chargeDto);
+        if (charge.getId() == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
 }

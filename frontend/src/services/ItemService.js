@@ -28,6 +28,18 @@ const DeleteItem = (itemId) => {
     return axios.delete(`item/${itemId}`);
 }
 
+const EditItemsInShoppingCart = (cartDto) => {
+    return axios.post("item/update-cart", cartDto);
+}
+
+const ClearItemsFromShoppingCart = (userEmail) => {
+    return axios.post("item/clear-cart", userEmail);
+}
+
+const ChargeItems = (chargeDto) => {
+    return axios.post("item/charge", chargeDto);
+}
+
 const ItemGender = ["Male", "Female", "Kids", "Unisex", "Accessories"];
 
 const Sport = ["None", "Multiple", "Basketball", "Football", "Skiing", "Swimming", "Handball", "Tennis", "Other"]
@@ -41,6 +53,9 @@ export {
     DeleteItem,
     GetItemsByCategory,
     GetItemsByCompany,
+    EditItemsInShoppingCart,
+    ClearItemsFromShoppingCart,
+    ChargeItems,
     ItemGender,
     Sport
 }

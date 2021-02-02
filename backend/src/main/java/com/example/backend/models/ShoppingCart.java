@@ -1,5 +1,6 @@
 package com.example.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,6 @@ public class ShoppingCart {
     Set<SportItem> items;
 
     @OneToOne
+    @JsonIgnore
     User cartOwner;
 }

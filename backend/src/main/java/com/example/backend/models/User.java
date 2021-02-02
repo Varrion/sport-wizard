@@ -41,7 +41,6 @@ public class User implements UserDetails {
     Boolean hasCreatedCompany;
 
     @OneToOne(mappedBy = "cartOwner", orphanRemoval = true)
-    @JsonIgnore
     ShoppingCart shoppingCart;
 
     @OneToOne(mappedBy = "companyOwner", orphanRemoval = true)
